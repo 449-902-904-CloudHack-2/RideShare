@@ -2,7 +2,7 @@ version: "3"
 services:
   rabbitmq_container:
     container_name: rabbitmq_container
-    image: rabbitmq
+    image: rabbitmq:3-management
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -10,6 +10,8 @@ services:
   producer:
     container_name: producer
     build: producer/
+    ports:
+      - "5000:5000"
     volumes:
       - ./producer:/app
     depends_on:

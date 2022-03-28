@@ -9,4 +9,4 @@ RUN pip3 install pika flask
 
 ENTRYPOINT [ "python3" ]
 
-CMD [ "/producer/producer_abc.py" ]
+CMD [ "producer_abc.py" ]
