@@ -1,26 +1,33 @@
 version: "3"
 services:
-  producer:
-    container_name: producer
-    depends_on:
-      - rabbitmq_container
-
-  ride_mapping:
-    container_name: RideMatching
-    build: consumer/ride_matching/Dockerfile_ride_matching
-    environment:
-      - PRODUCER_ADDRESS=0.0.0.0:8181
-      - CONSUMER_ID=abc
-
-  database:
-    container_name: Database
-    build: consumer/database_inserting/Dockerfile_database_inserting
-    depends_on:
-      - producer
-
   rabbitmq_container:
     container_name: rabbitmq_container
     image: rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
+
+  producer:
+    container_name: producer
+    build: producer/
+    volumes:
+      - ./producer:/app
+    depends_on:
+      - rabbitmq_container
+
+  ride_mapping:
+    container_name: RideMatching
+    build: consumer/ride_matching/
+    environment:
+      - PRODUCER_ADDRESS=0.0.0.0:8181
+      - CONSUMER_ID=abc
+    volumes:
+      - ./consumer/ride_mapping:/app
+
+  database:
+    container_name: Database
+    build: consumer/database_inserting/
+    volumes:
+      - ./consumer/database_inserting:/app
+    depends_on:
+      - producer
