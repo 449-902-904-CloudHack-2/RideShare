@@ -5,7 +5,7 @@ RUN apt-get update -y && \
 
 WORKDIR /app
 
-RUN pip3 install pika flask
+RUN pip3 install pika flask psycopg2
 
 ENTRYPOINT [ "python3" ]
 
