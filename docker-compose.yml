@@ -30,7 +30,7 @@ services:
       - ./consumer/ride_mapping:/app
 
   database_inserting:
-    container_name: Database
+    container_name: Database_inserting
     build: consumer/database_inserting/
     volumes:
       - ./consumer/database_inserting:/app

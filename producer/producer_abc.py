@@ -13,6 +13,15 @@ def index():
 
 @app.route('/new_ride', methods=["POST"])
 def add():
+    """
+    {
+      "pickup": "pickup",
+      "destination": "destination",
+      "time": 10,
+      "cost": 100,
+      "seats": 2
+    }
+    """
     request_data = request.get_json()
     channel, connection = get_rabbitmq_connection()
     channel.basic_publish(

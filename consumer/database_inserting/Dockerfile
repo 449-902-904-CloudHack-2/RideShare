@@ -5,8 +5,8 @@ RUN apt-get update -y && \
 
 WORKDIR /app
 
-RUN pip3 install pika flask psycopg2
+RUN pip3 install pika flask psycopg2-binary
 
 ENTRYPOINT [ "python3" ]
 
-CMD [ "/database_inserting/database_inserting.py" ]
+CMD [ "./database_inserting.py" ]

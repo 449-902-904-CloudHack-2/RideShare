@@ -4,18 +4,35 @@ from datetime import datetime
 import pika
 import psycopg2
 
-connection = pika.BlockingConnection(pika.ConnectionParameters(host='127.0.0.1'))
-channel = connection.channel()
+
+def get_rabbitmq_connection():
+    _connection = pika.BlockingConnection(pika.ConnectionParameters(host="rabbitmq_container"))
+    _channel = connection.channel()
+    return _channel, _connection
+
+
+channel, connection = get_rabbitmq_connection()
 
 
 def callback(ch, method, properties, body):
+    # print("-----------------------------------------------------------------------------")
+    # print("-----------------------------------------------------------------------------")
+    # print("-----------------------------------------------------------------------------")
+    # print("-----------------------------------------------------------------------------")
+    # print("-----------------------------------------------------------------------------")
+    # data = json.dumps(body)
+    # print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Processing...' + data)
     print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Processing...')
-
-    data = json.loads(body)
+    print("-----------------------------------------------------------------------------")
+    print("-----------------------------------------------------------------------------")
+    print("-----------------------------------------------------------------------------")
+    print("-----------------------------------------------------------------------------")
+    print("-----------------------------------------------------------------------------")
+    print("-----------------------------------------------------------------------------")
 
     # establishing the connection
     conn = psycopg2.connect(
-        database="rideshare_db", user='postgres', password='postgres', host='postgres_container',
+        database="rideshare_db", user='postgres', password="1234", host='postgres_container',
         port='5432'
     )
     cursor = conn.cursor()
