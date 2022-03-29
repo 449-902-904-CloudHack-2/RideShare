@@ -29,10 +29,21 @@ services:
     volumes:
       - ./consumer/ride_mapping:/app
 
-  database:
+  database_inserting:
     container_name: Database
     build: consumer/database_inserting/
     volumes:
       - ./consumer/database_inserting:/app
     depends_on:
       - producer
+      - postgres_container
+
+  postgres_container:
+    image: postgres
+    container_name: postgres_container
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
+    environment:
+      - POSTGRES_PASSWORD=1234
