@@ -1,4 +1,5 @@
 import json
+import os
 
 import pika
 from flask import Flask, request
@@ -22,6 +23,7 @@ def add():
       "seats": 2
     }
     """
+    print("CALLED")
     request_data = request.get_json()
     channel, connection = get_rabbitmq_connection()
     channel.basic_publish(
@@ -37,7 +39,9 @@ def add():
 
 
 def get_rabbitmq_connection():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host="rabbitmq_container"))
+    amqp_url = os.environ['AMQP_URL']
+    url_params = pika.URLParameters(amqp_url)
+    connection = pika.BlockingConnection(url_params)
     channel = connection.channel()
     channel.queue_declare(queue="task_queue", durable=True)
     return channel, connection
