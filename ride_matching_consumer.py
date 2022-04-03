@@ -1,8 +1,6 @@
-# Code for Ride Matching Consumer
 import json
 import os
 import time
-
 import pika
 import requests
 
@@ -10,21 +8,6 @@ CONSUMER_ID = os.environ["CONSUMER_ID"]
 PRODUCER_ADDRESS = os.environ["PRODUCER_ADDRESS"]
 
 time.sleep(10)
-
-response = requests.post(
-    f"http://{PRODUCER_ADDRESS}/new_ride_matching_consumer",
-    data=f"consumer_id={CONSUMER_ID}"
-)
-
-assert response.status_code == 200
-
-connection = pika.BlockingConnection(
-    pika.ConnectionParameters(host="rabbitmq")
-)
-channel = connection.channel()
-
-channel.queue_declare(queue="ride_match", durable=True)
-print(f"Consumer {CONSUMER_ID} started...", flush=True)
 
 
 def callback(ch, method, properties, body):
@@ -38,7 +21,26 @@ def callback(ch, method, properties, body):
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
-channel.basic_qos(prefetch_count=1)
-channel.basic_consume(queue="ride_match", on_message_callback=callback)
+def rideMatchingConnection():
+    connection = pika.BlockingConnection(
+        pika.ConnectionParameters(host="rabbit_mq")
+    )
+    channel = connection.channel()
+    channel.queue_declare(queue="ride_match", durable=True)
+    print(f"Consumer {CONSUMER_ID} started...", flush=True)
+    channel.basic_qos(prefetch_count=1)
+    channel.basic_consume(queue="ride_match", on_message_callback=callback)
+    channel.start_consuming()
 
-channel.start_consuming()
+
+rideMatchingConnection()
+
+
+response = requests.post(
+    f"http://{PRODUCER_ADDRESS}/new_ride_matching_consumer",
+    data=f"consumer_id={CONSUMER_ID}"
+)
+
+assert response.status_code == 200
+
+
