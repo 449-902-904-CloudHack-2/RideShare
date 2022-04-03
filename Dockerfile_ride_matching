@@ -1,10 +1,10 @@
 # Dockerfile for ride matching consumer
 FROM python
 
-RUN mkdir -p /usr/src/consumer \
+RUN mkdir -p /ride_matching \
     && pip3 install pika requests
 
-WORKDIR /usr/src/consumer
+WORKDIR /ride_matching
 COPY ride_matching_consumer.py ./
 
 CMD [ "python3", "ride_matching_consumer.py" ]
