@@ -32,7 +32,7 @@ def callback(ch, method, properties, body):
     )
     cursor = conn.cursor()
 
-    query = "INSERT INTO books JSON '" + json.dumps(data) + "'"
+    query = "INSERT INTO RideData JSON '" + json.dumps(data) + "'"
 
     print(datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ' Processed !')
 

@@ -53,4 +53,5 @@ services:
     expose:
       - "5432"
     environment:
+      - POSTGRES_DB=rideshare_db
       - POSTGRES_PASSWORD=1234
