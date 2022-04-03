@@ -1,11 +1,13 @@
 import json
 from uuid import uuid4
+
 import pika
 from flask import Flask, request
 
 consumers = []
 
 app = Flask(__name__)
+
 
 def createConnections():
     _connection = pika.BlockingConnection(
@@ -17,6 +19,7 @@ def createConnections():
     _channel.queue_declare(queue="database", durable=True)
 
     return _connection, _channel
+
 
 def sendDataToQueue(queue, data, task_id, channel):
     channel.basic_publish(
@@ -30,10 +33,9 @@ def sendDataToQueue(queue, data, task_id, channel):
     )
 
 
-
 @app.route("/new_ride", methods=["POST"])
 def new_ride():
-    connection, channel=createConnections()
+    connection, channel = createConnections()
     body = json.dumps(request.form)
     task_id = "task_" + uuid4().hex
     sendDataToQueue("ride_matching", body, task_id, channel)

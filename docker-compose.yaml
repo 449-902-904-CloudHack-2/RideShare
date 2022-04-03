@@ -21,6 +21,7 @@ services:
       context: .
       dockerfile: Dockerfile_ride_matching
     container_name: ride_matching_1
+    restart: on-failure
     depends_on:
       - producer
     environment:
@@ -32,6 +33,7 @@ services:
       context: .
       dockerfile: Dockerfile_ride_matching
     container_name: ride_matching_2
+    restart: on-failure
     depends_on:
       - producer
     environment:
@@ -43,6 +45,7 @@ services:
       context: .
       dockerfile: Dockerfile_database
     container_name: ride_database
+    restart: on-failure
     depends_on:
       - producer
       - mongodb

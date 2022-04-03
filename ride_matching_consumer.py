@@ -26,10 +26,10 @@ def rideMatchingConnection():
         pika.ConnectionParameters(host="rabbit_mq")
     )
     channel = connection.channel()
-    channel.queue_declare(queue="ride_match", durable=True)
+    channel.queue_declare(queue="ride_matching", durable=True)
     print(f"Consumer {CONSUMER_ID} started...", flush=True)
     channel.basic_qos(prefetch_count=1)
-    channel.basic_consume(queue="ride_match", on_message_callback=callback)
+    channel.basic_consume(queue="ride_matching", on_message_callback=callback)
     channel.start_consuming()
 
 
@@ -42,5 +42,3 @@ response = requests.post(
 )
 
 assert response.status_code == 200
-
-
