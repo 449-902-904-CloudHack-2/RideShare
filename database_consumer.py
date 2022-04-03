@@ -1,42 +1,36 @@
+# Use this file to setup the database consumer that stores the ride information in the database
 import json
 import time
 
 import pika
 import pymongo
 
-time.sleep(20)
+time.sleep(10)
+
+client = pymongo.MongoClient("mongodb://mongodb_container:27017")
+db = client["ride_matching"]
+collection = db["ride_details"]
+
+connection = pika.BlockingConnection(
+    pika.ConnectionParameters(host="rabbit_mq")
+)
+channel = connection.channel()
+
+channel.queue_declare(queue="database", durable=True)
+print("Database consumer started...", flush=True)
 
 
 def callback(ch, method, properties, body):
-    collection = dbConnection()
     body = json.loads(body)
     body["_id"] = properties.message_id
-    print(f"Consumed {body} from database queue")
+    print(f"Consumed {body} from database queue", flush=True)
 
     collection.insert_one(body)
 
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
-def dbConnection():
-    print("Database consumer starting...")
-    client = pymongo.MongoClient("mongodb://mongodb_container:27017")
-    db = client["ride_matching_db"]
-    _collection = db["ride_details"]
+channel.basic_qos(prefetch_count=1)
+channel.basic_consume(queue="database", on_message_callback=callback)
 
-    return _collection
-
-
-def rabbitmqConnection():
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters(host="rabbit_mq")
-    )
-    _channel = connection.channel()
-    _channel.queue_declare(queue="database", durable=True)
-    print("Database consumer started...")
-    _channel.basic_qos(prefetch_count=1)
-    _channel.basic_consume(queue="database", on_message_callback=callback)
-    _channel.start_consuming()
-
-
-rabbitmqConnection()
+channel.start_consuming()
