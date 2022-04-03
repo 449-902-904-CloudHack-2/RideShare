@@ -2,13 +2,8 @@
 
 Team members details:
 
-A Spoorthi Alva - PES2UG19CS001
+PES2UG19CS449 - Vedanth Mohan
 
-A R Manyatha - PES2UG19CS002 
+PES2UG19CS902 - Jacob Bosco
 
-Achyut Jagini - PES2UG19CS013
-
-Amulya S Dinesh - PES2UG19CS035
-
-
-
+PES2UG19CS904 - Lavanya Yavagal
