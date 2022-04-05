@@ -1,4 +1,4 @@
-# CloudHack_2
+# Cloud Computing Hackathon (Problem Statement 2)
 
 ## Team members details
 - PES2UG19CS449 - Vedanth Mohan
